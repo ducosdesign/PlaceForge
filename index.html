@@ -10,41 +10,45 @@
             --gh-border: #d0d7de;
             --pf-blue: #0969da;
             --pf-green: #2ea44f;
+            --pf-dark: #24292f;
         }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background: #fdfdfd; margin: 0; padding: 20px; color: #24292f; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background: #fafafa; margin: 0; padding: 20px; color: var(--pf-dark); }
         
         .header { width: 100%; max-width: 1000px; margin-bottom: 20px; border-bottom: 1px solid var(--gh-border); padding-bottom: 10px; }
-        .header h1 { margin: 0; font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .header h1 { margin: 0; font-size: 22px; font-weight: 600; }
         .header h1 span { font-weight: 300; color: #57606a; }
 
-        .controls { background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--gh-border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; width: 100%; max-width: 1000px; }
+        .controls { background: white; padding: 24px; border-radius: 8px; border: 1px solid var(--gh-border); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; width: 100%; max-width: 1000px; box-sizing: border-box; }
         
-        .canvas-container { position: relative; background: #fff; border: 1px solid var(--gh-border); overflow: auto; border-radius: 6px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); }
+        .row { display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap; }
+        .group { display: flex; flex-direction: column; gap: 6px; }
         
-        /* Blueprint Grid Effect */
+        .text-action-group { display: flex; align-items: center; background: #fff; border: 1px solid var(--gh-border); border-radius: 6px; padding: 2px; flex-grow: 1; }
+        .text-action-group input, .text-action-group select { border: none; padding: 8px 12px; outline: none; background: transparent; }
+        .text-action-group input[type="text"] { flex-grow: 2; min-width: 150px; }
+        .text-action-group input[type="number"] { width: 60px; border-left: 1px solid var(--gh-border); }
+        .text-action-group select { width: 140px; border-left: 1px solid var(--gh-border); cursor: pointer; font-size: 13px; }
+        .text-action-group button { border-radius: 4px; border: none; margin-left: 5px; }
+
+        .canvas-container { position: relative; background: #fff; border: 1px solid var(--gh-border); overflow: auto; border-radius: 6px; }
         canvas { 
             background: #ffffff; 
             cursor: crosshair; 
             display: block; 
-            background-image: linear-gradient(var(--gh-gray) 1px, transparent 1px), linear-gradient(90deg, var(--gh-gray) 1px, transparent 1px);
+            background-image: radial-gradient(var(--gh-border) 0.5px, transparent 0.5px);
             background-size: 20px 20px;
         }
 
-        .btn-group { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #eee; margin-top: 5px; padding-top: 15px; }
-        
-        button { padding: 8px 16px; cursor: pointer; border: 1px solid rgba(27,31,36,0.15); border-radius: 6px; background: var(--pf-green); color: white; font-weight: 500; font-size: 14px; transition: 0.1s; }
-        button:hover { background: #2c974b; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        button.secondary { background: var(--gh-gray); color: #24292f; }
-        button.secondary:hover { background: #ebecf0; }
-        button.export { background: #24292f; }
-        button.export:hover { background: #000; }
+        button { padding: 8px 16px; cursor: pointer; border: 1px solid rgba(27,31,36,0.15); border-radius: 6px; background: var(--pf-green); color: white; font-weight: 500; font-size: 14px; }
+        button:hover { background: #2c974b; }
+        button.secondary { background: var(--gh-gray); color: var(--pf-dark); }
+        button.export { background: var(--pf-dark); }
         button.danger { background: #cf222e; }
 
-        label { font-size: 11px; font-weight: 600; color: #57606a; text-transform: uppercase; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 6px 12px; border: 1px solid var(--gh-border); border-radius: 6px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--pf-blue); ring: 2px solid var(--pf-blue); }
-
-        .footer { margin-top: 20px; font-size: 12px; color: #57606a; text-align: center; }
+        label { font-size: 11px; font-weight: 600; color: #57606a; text-transform: uppercase; }
+        input[type="color"] { width: 60px; height: 38px; padding: 2px; border: 1px solid var(--gh-border); border-radius: 6px; }
+        
+        .footer { margin-top: 20px; font-size: 12px; color: #57606a; }
     </style>
 </head>
 <body>
@@ -54,38 +58,54 @@
     </div>
 
     <div class="controls">
-        <div>
-            <label>Dimensions</label>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" id="canvasW" value="800" onchange="resizeCanvas()">
-                <input type="number" id="canvasH" value="400" onchange="resizeCanvas()">
+        <div class="row">
+            <div class="group">
+                <label>Dimensions</label>
+                <div style="display: flex; gap: 4px;">
+                    <input type="number" id="canvasW" value="800" style="width: 80px;" onchange="resizeCanvas()">
+                    <input type="number" id="canvasH" value="400" style="width: 80px;" onchange="resizeCanvas()">
+                </div>
+            </div>
+            <div class="group">
+                <label>Theme Color</label>
+                <input type="color" id="colorPicker" value="#0969da">
+            </div>
+            <div class="group" style="flex-grow: 1;">
+                <label>Text & Typography</label>
+                <div class="text-action-group">
+                    <input type="text" id="textInput" placeholder="Enter text...">
+                    <select id="fontFamily" onchange="loadGoogleFont(this.value)">
+                        <option value="sans-serif">System Sans</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="Playfair Display">Playfair Display</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Open Sans">Open Sans</option>
+                        <option value="Bebas Neue">Bebas Neue</option>
+                        <option value="Pacifico">Pacifico</option>
+                        <option value="Courier Prime">Courier Prime</option>
+                    </select>
+                    <input type="number" id="fontSize" value="48" title="Font Size">
+                    <button onclick="addText()">+ Add Text</button>
+                </div>
             </div>
         </div>
-        <div>
-            <label>Text Content</label>
-            <input type="text" id="textInput" placeholder="Enter message...">
-        </div>
-        <div>
-            <label>Font Size</label>
-            <input type="number" id="fontSize" value="24">
-        </div>
-        <div>
-            <label>Forge Color</label>
-            <input type="color" id="colorPicker" value="#0969da">
-        </div>
-        
-        <div class="btn-group">
-            <button onclick="addText()">+ Add Text</button>
-            <button class="secondary" onclick="addCommitLabel()">+ Add Commit Badge</button>
-            <button onclick="addShape('rect')">Square</button>
-            <button onclick="addShape('circle')">Circle</button>
-            <button class="danger" style="margin-left: auto;" onclick="clearCanvas()">Clear Forge</button>
-        </div>
 
-        <div class="btn-group">
-            <button class="export" onclick="exportImage('png')">Download PNG</button>
-            <button class="export" onclick="exportImage('jpeg')">Download JPG</button>
-            <button class="export" onclick="exportSVG()">Download SVG</button>
+        <div class="row" style="margin-bottom: 0; border-top: 1px solid #eee; padding-top: 20px;">
+            <div class="group">
+                <label>Quick Shapes</label>
+                <div style="display: flex; gap: 8px;">
+                    <button class="secondary" onclick="addShape('rect')">Square</button>
+                    <button class="secondary" onclick="addShape('circle')">Circle</button>
+                </div>
+            </div>
+            <div class="group" style="margin-left: auto;">
+                <label>Export Asset</label>
+                <div style="display: flex; gap: 8px;">
+                    <button class="export" onclick="exportImage('png')">PNG</button>
+                    <button class="export" onclick="exportSVG()">SVG</button>
+                    <button class="danger" onclick="clearCanvas()">Clear</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -94,14 +114,10 @@
     </div>
 
     <div class="footer">
-        Drag items to arrange • Right-click to delete • PlaceForge v1.0.2
+        Drag to move • Right-click to delete • Using Google Fonts API
     </div>
 
 <script>
-    /**
-     * @project PlaceForge
-     * @commit 7f2a91 | Added grid-snap preview and branding
-     */
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
     let elements = [];
@@ -109,33 +125,38 @@
     let isDragging = false;
     let offsetX, offsetY;
 
+    // Load Google Font dynamically
+    function loadGoogleFont(font) {
+        if (font === 'sans-serif') return;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, '+')}&display=swap`;
+        document.head.appendChild(link);
+        
+        // Redraw when loaded to reflect changes on existing elements
+        document.fonts.load(`10pt "${font}"`).then(() => draw());
+    }
+
     function resizeCanvas() {
         canvas.width = document.getElementById('canvasW').value;
         canvas.height = document.getElementById('canvasH').value;
         draw();
     }
 
-    function addText() {
+    async function addText() {
+        const font = document.getElementById('fontFamily').value;
+        const size = parseInt(document.getElementById('fontSize').value);
+        
+        // Wait for font readiness before adding
+        await document.fonts.load(`${size}px "${font}"`);
+        
         elements.push({
             type: 'text',
-            content: document.getElementById('textInput').value || "Placeholder Text",
-            x: 50, y: 100,
+            content: document.getElementById('textInput').value || "PlaceForge",
+            x: 50, y: 150,
             color: document.getElementById('colorPicker').value,
-            fontSize: parseInt(document.getElementById('fontSize').value)
-        });
-        draw();
-    }
-
-    function addCommitLabel() {
-        elements.push({
-            type: 'commit',
-            content: document.getElementById('textInput').value || "feat: update",
-            x: 50, y: 50,
-            w: 0,
-            h: 30,
-            color: '#ddf4ff',
-            textColor: '#0969da',
-            fontSize: 13
+            fontSize: size,
+            fontFamily: font
         });
         draw();
     }
@@ -144,8 +165,8 @@
         elements.push({
             type: shapeType,
             x: 100, y: 100,
-            w: 150, h: 100,
-            r: 50,
+            w: 200, h: 120,
+            r: 60,
             color: document.getElementById('colorPicker').value
         });
         draw();
@@ -156,7 +177,7 @@
         elements.forEach(el => {
             ctx.fillStyle = el.color;
             if (el.type === 'text') {
-                ctx.font = `${el.fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+                ctx.font = `${el.fontSize}px "${el.fontFamily}"`;
                 el.w = ctx.measureText(el.content).width;
                 el.h = el.fontSize;
                 ctx.fillText(el.content, el.x, el.y);
@@ -166,18 +187,6 @@
                 ctx.beginPath();
                 ctx.arc(el.x, el.y, el.r, 0, Math.PI * 2);
                 ctx.fill();
-            } else if (el.type === 'commit') {
-                ctx.font = `bold ${el.fontSize}px monospace`;
-                const tw = ctx.measureText(el.content).width;
-                el.w = tw + 24;
-                ctx.fillStyle = el.color;
-                ctx.beginPath();
-                ctx.roundRect(el.x, el.y, el.w, el.h, 6);
-                ctx.fill();
-                ctx.strokeStyle = '#0969da33';
-                ctx.stroke();
-                ctx.fillStyle = el.textColor;
-                ctx.fillText(el.content, el.x + 12, el.y + 20);
             }
         });
     }
@@ -191,7 +200,7 @@
             let hit = false;
             if (el.type === 'text') {
                 if (mx >= el.x && mx <= el.x + el.w && my >= el.y - el.h && my <= el.y) hit = true;
-            } else if (el.type === 'rect' || el.type === 'commit') {
+            } else if (el.type === 'rect') {
                 if (mx >= el.x && mx <= el.x + el.w && my >= el.y && my <= el.y + el.h) hit = true;
             } else if (el.type === 'circle') {
                 if (Math.sqrt((mx - el.x)**2 + (my - el.y)**2) < el.r) hit = true;
@@ -234,19 +243,28 @@
 
     function exportImage(format) {
         const link = document.createElement('a');
-        link.download = `placeforge-export.${format}`;
+        link.download = `placeforge-${Date.now()}.${format}`;
         link.href = canvas.toDataURL(`image/${format}`);
         link.click();
     }
 
     function exportSVG() {
         let items = elements.map(el => {
-            if (el.type === 'text') return `<text x="${el.x}" y="${el.y}" font-family="sans-serif" font-size="${el.fontSize}" fill="${el.color}">${el.content}</text>`;
+            if (el.type === 'text') {
+                return `<text x="${el.x}" y="${el.y}" font-family="'${el.fontFamily}'" font-size="${el.fontSize}" fill="${el.color}">${el.content}</text>`;
+            }
             if (el.type === 'rect') return `<rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}" fill="${el.color}" />`;
             if (el.type === 'circle') return `<circle cx="${el.x}" cy="${el.y}" r="${el.r}" fill="${el.color}" />`;
-            if (el.type === 'commit') return `<g><rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}" rx="6" fill="${el.color}" /><text x="${el.x+12}" y="${el.y+20}" font-family="monospace" font-size="${el.fontSize}" font-weight="bold" fill="${el.textColor}">${el.content}</text></g>`;
         }).join('\n');
-        const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">${items}</svg>`;
+        
+        // Include font styles in SVG so it looks right when opened elsewhere
+        const fontsUsed = [...new Set(elements.filter(e => e.type === 'text').map(e => e.fontFamily))];
+        const fontImports = fontsUsed.map(f => `@import url('https://fonts.googleapis.com/css2?family=${f.replace(/ /g, '+')}&display=swap');`).join('\n');
+
+        const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
+            <style>${fontImports} text { white-space: pre; }</style>
+            ${items}
+        </svg>`;
         const blob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
         const link = document.createElement('a');
         link.download = 'placeforge-export.svg';
