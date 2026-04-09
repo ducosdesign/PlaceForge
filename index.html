@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlaceForge | Placeholder Creator</title>
+    <title>PlaceForge | Professional Editor</title>
     <style>
         :root {
             --gh-gray: #f6f8fa;
@@ -14,107 +14,105 @@
         }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background: #fafafa; margin: 0; padding: 20px; color: var(--pf-dark); }
         
-        .header { width: 100%; max-width: 1000px; margin-bottom: 20px; border-bottom: 1px solid var(--gh-border); padding-bottom: 10px; }
+        .header { width: 100%; max-width: 1100px; margin-bottom: 20px; border-bottom: 1px solid var(--gh-border); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
         .header h1 { margin: 0; font-size: 22px; font-weight: 600; }
-        .header h1 span { font-weight: 300; color: #57606a; }
 
-        .controls { background: white; padding: 24px; border-radius: 8px; border: 1px solid var(--gh-border); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; width: 100%; max-width: 1000px; box-sizing: border-box; }
+        .controls { background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--gh-border); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; width: 100%; max-width: 1100px; box-sizing: border-box; }
         
-        .row { display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap; }
-        .group { display: flex; flex-direction: column; gap: 6px; }
+        .row { display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .group { display: flex; flex-direction: column; gap: 4px; }
         
         .text-action-group { display: flex; align-items: center; background: #fff; border: 1px solid var(--gh-border); border-radius: 6px; padding: 2px; flex-grow: 1; }
-        .text-action-group input, .text-action-group select { border: none; padding: 8px 12px; outline: none; background: transparent; }
-        .text-action-group input[type="text"] { flex-grow: 2; min-width: 150px; }
-        .text-action-group input[type="number"] { width: 60px; border-left: 1px solid var(--gh-border); }
-        .text-action-group select { width: 140px; border-left: 1px solid var(--gh-border); cursor: pointer; font-size: 13px; }
-        .text-action-group button { border-radius: 4px; border: none; margin-left: 5px; }
+        .text-action-group input, .text-action-group select { border: none; padding: 8px; outline: none; background: transparent; font-size: 14px; }
+        .text-action-group select { border-left: 1px solid var(--gh-border); width: 150px; }
+        .text-action-group button { border-radius: 4px; border: none; margin-left: 5px; height: 34px; }
 
-        .canvas-container { position: relative; background: #fff; border: 1px solid var(--gh-border); overflow: auto; border-radius: 6px; }
-        canvas { 
-            background: #ffffff; 
-            cursor: crosshair; 
-            display: block; 
-            background-image: radial-gradient(var(--gh-border) 0.5px, transparent 0.5px);
-            background-size: 20px 20px;
-        }
+        .canvas-outer { position: relative; background: #eee; padding: 40px; border-radius: 8px; border: 1px dashed #ccc; max-width: 100%; overflow: auto; }
+        canvas { background: #fff; cursor: crosshair; display: block; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
 
-        button { padding: 8px 16px; cursor: pointer; border: 1px solid rgba(27,31,36,0.15); border-radius: 6px; background: var(--pf-green); color: white; font-weight: 500; font-size: 14px; }
+        button { padding: 8px 14px; cursor: pointer; border: 1px solid rgba(27,31,36,0.15); border-radius: 6px; background: var(--pf-green); color: white; font-weight: 500; font-size: 13px; }
         button:hover { background: #2c974b; }
         button.secondary { background: var(--gh-gray); color: var(--pf-dark); }
         button.export { background: var(--pf-dark); }
-        button.danger { background: #cf222e; }
+        button.danger { background: #fff; color: #cf222e; border-color: #cf222e; }
+        button.danger:hover { background: #cf222e; color: #fff; }
 
-        label { font-size: 11px; font-weight: 600; color: #57606a; text-transform: uppercase; }
-        input[type="color"] { width: 60px; height: 38px; padding: 2px; border: 1px solid var(--gh-border); border-radius: 6px; }
+        label { font-size: 10px; font-weight: 700; color: #57606a; text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select { padding: 8px; border: 1px solid var(--gh-border); border-radius: 6px; font-size: 13px; }
         
-        .footer { margin-top: 20px; font-size: 12px; color: #57606a; }
+        .footer { margin-top: 20px; font-size: 11px; color: #888; text-align: center; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>PlaceForge <span>/ editor</span></h1>
+        <h1>PlaceForge <span>/ studio</span></h1>
+        <div style="font-size: 12px; color: var(--pf-blue); font-weight: bold;">v1.1.0 Stable</div>
     </div>
 
     <div class="controls">
         <div class="row">
             <div class="group">
-                <label>Dimensions</label>
+                <label>Canvas Size</label>
                 <div style="display: flex; gap: 4px;">
-                    <input type="number" id="canvasW" value="800" style="width: 80px;" onchange="resizeCanvas()">
-                    <input type="number" id="canvasH" value="400" style="width: 80px;" onchange="resizeCanvas()">
+                    <input type="number" id="canvasW" value="800" style="width: 70px;" onchange="resizeCanvas()">
+                    <input type="number" id="canvasH" value="450" style="width: 70px;" onchange="resizeCanvas()">
                 </div>
             </div>
             <div class="group">
-                <label>Theme Color</label>
-                <input type="color" id="colorPicker" value="#0969da">
+                <label>Presets</label>
+                <select onchange="applyPreset(this.value)">
+                    <option value="">Custom</option>
+                    <option value="1920,1080">Desktop (16:9)</option>
+                    <option value="1080,1080">Instagram Square</option>
+                    <option value="1200,630">FB Shared Image</option>
+                    <option value="800,400">Classic Placeholder</option>
+                </select>
             </div>
             <div class="group" style="flex-grow: 1;">
-                <label>Text & Typography</label>
+                <label>Add Text Element</label>
                 <div class="text-action-group">
-                    <input type="text" id="textInput" placeholder="Enter text...">
-                    <select id="fontFamily" onchange="loadGoogleFont(this.value)">
+                    <input type="text" id="textInput" placeholder="Type here..." style="flex-grow: 1;">
+                    <select id="fontFamily" onchange="loadFont(this.value)">
                         <option value="sans-serif">System Sans</option>
-                        <option value="Roboto">Roboto</option>
-                        <option value="Playfair Display">Playfair Display</option>
+                        <option value="Inter">Inter</option>
+                        <option value="Poppins">Poppins</option>
+                        <option value="Lora">Lora (Serif)</option>
+                        <option value="Oswald">Oswald</option>
                         <option value="Montserrat">Montserrat</option>
-                        <option value="Open Sans">Open Sans</option>
-                        <option value="Bebas Neue">Bebas Neue</option>
-                        <option value="Pacifico">Pacifico</option>
-                        <option value="Courier Prime">Courier Prime</option>
+                        <option value="Fira Code">Fira Code</option>
+                        <option value="Playfair Display">Playfair Display</option>
+                        <option value="Dancing Script">Dancing Script</option>
                     </select>
-                    <input type="number" id="fontSize" value="48" title="Font Size">
-                    <button onclick="addText()">+ Add Text</button>
+                    <button onclick="addText()">Add Text</button>
                 </div>
             </div>
         </div>
 
-        <div class="row" style="margin-bottom: 0; border-top: 1px solid #eee; padding-top: 20px;">
+        <div class="row" style="margin-bottom: 0; border-top: 1px solid #eee; padding-top: 15px;">
             <div class="group">
-                <label>Quick Shapes</label>
+                <label>Add Shape</label>
                 <div style="display: flex; gap: 8px;">
-                    <button class="secondary" onclick="addShape('rect')">Square</button>
+                    <button class="secondary" onclick="addShape('rect')">Rectangle</button>
                     <button class="secondary" onclick="addShape('circle')">Circle</button>
+                    <input type="color" id="colorPicker" value="#0969da" style="height: 33px; width: 45px; padding: 2px;">
                 </div>
             </div>
-            <div class="group" style="margin-left: auto;">
-                <label>Export Asset</label>
-                <div style="display: flex; gap: 8px;">
-                    <button class="export" onclick="exportImage('png')">PNG</button>
-                    <button class="export" onclick="exportSVG()">SVG</button>
-                    <button class="danger" onclick="clearCanvas()">Clear</button>
-                </div>
+            <div class="group" style="margin-left: auto; flex-direction: row; align-items: flex-end;">
+                <button class="secondary" style="border-color: var(--pf-blue); color: var(--pf-blue);" onclick="cropToElements()">Crop to Fit</button>
+                <button class="export" onclick="exportImage('png')">Download PNG</button>
+                <button class="export" onclick="exportSVG()">Download SVG</button>
+                <button class="danger" onclick="clearCanvas()">Reset</button>
             </div>
         </div>
     </div>
 
-    <div class="canvas-container">
+    <div class="canvas-outer">
         <canvas id="mainCanvas"></canvas>
     </div>
 
     <div class="footer">
-        Drag to move • Right-click to delete • Using Google Fonts API
+        <b>DRAG</b> to move • <b>CORNER HANDLES</b> to resize • <b>RIGHT-CLICK</b> to delete element
     </div>
 
 <script>
@@ -123,18 +121,25 @@
     let elements = [];
     let selectedElement = null;
     let isDragging = false;
+    let isResizing = false;
     let offsetX, offsetY;
+    const HANDLE_SIZE = 8;
 
-    // Load Google Font dynamically
-    function loadGoogleFont(font) {
+    function loadFont(font) {
         if (font === 'sans-serif') return;
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, '+')}&display=swap`;
+        link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, '+')}:wght@400;700&display=swap`;
         document.head.appendChild(link);
-        
-        // Redraw when loaded to reflect changes on existing elements
         document.fonts.load(`10pt "${font}"`).then(() => draw());
+    }
+
+    function applyPreset(val) {
+        if (!val) return;
+        const [w, h] = val.split(',');
+        document.getElementById('canvasW').value = w;
+        document.getElementById('canvasH').value = h;
+        resizeCanvas();
     }
 
     function resizeCanvas() {
@@ -143,20 +148,14 @@
         draw();
     }
 
-    async function addText() {
-        const font = document.getElementById('fontFamily').value;
-        const size = parseInt(document.getElementById('fontSize').value);
-        
-        // Wait for font readiness before adding
-        await document.fonts.load(`${size}px "${font}"`);
-        
+    function addText() {
         elements.push({
             type: 'text',
             content: document.getElementById('textInput').value || "PlaceForge",
-            x: 50, y: 150,
+            x: 100, y: 150,
             color: document.getElementById('colorPicker').value,
-            fontSize: size,
-            fontFamily: font
+            fontSize: 60,
+            fontFamily: document.getElementById('fontFamily').value
         });
         draw();
     }
@@ -164,9 +163,9 @@
     function addShape(shapeType) {
         elements.push({
             type: shapeType,
-            x: 100, y: 100,
-            w: 200, h: 120,
-            r: 60,
+            x: 150, y: 150,
+            w: 200, h: 150,
+            r: 75,
             color: document.getElementById('colorPicker').value
         });
         draw();
@@ -188,13 +187,50 @@
                 ctx.arc(el.x, el.y, el.r, 0, Math.PI * 2);
                 ctx.fill();
             }
+
+            // Draw selection box and handle if selected
+            if (el === selectedElement) {
+                ctx.strokeStyle = '#0969da';
+                ctx.lineWidth = 2;
+                if (el.type === 'circle') {
+                    ctx.strokeRect(el.x - el.r, el.y - el.r, el.r * 2, el.r * 2);
+                    drawHandle(el.x + el.r, el.y + el.r);
+                } else {
+                    const yOff = el.type === 'text' ? -el.h : 0;
+                    ctx.strokeRect(el.x, el.y + yOff, el.w, el.h);
+                    drawHandle(el.x + el.w, el.y + yOff + el.h);
+                }
+            }
         });
+    }
+
+    function drawHandle(x, y) {
+        ctx.fillStyle = '#fff';
+        ctx.strokeStyle = '#0969da';
+        ctx.fillRect(x - HANDLE_SIZE/2, y - HANDLE_SIZE/2, HANDLE_SIZE, HANDLE_SIZE);
+        ctx.strokeRect(x - HANDLE_SIZE/2, y - HANDLE_SIZE/2, HANDLE_SIZE, HANDLE_SIZE);
     }
 
     canvas.onmousedown = (e) => {
         const rect = canvas.getBoundingClientRect();
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
+
+        // Check if clicking resize handle of selected element
+        if (selectedElement) {
+            let hX, hY;
+            const el = selectedElement;
+            if (el.type === 'circle') { hX = el.x + el.r; hY = el.y + el.r; }
+            else { hX = el.x + el.w; hY = el.y + (el.type === 'text' ? 0 : el.h); }
+
+            if (Math.abs(mx - hX) < 10 && Math.abs(my - hY) < 10) {
+                isResizing = true;
+                return;
+            }
+        }
+
+        // Hit detection for elements
+        selectedElement = null;
         for (let i = elements.length - 1; i >= 0; i--) {
             const el = elements[i];
             let hit = false;
@@ -205,26 +241,43 @@
             } else if (el.type === 'circle') {
                 if (Math.sqrt((mx - el.x)**2 + (my - el.y)**2) < el.r) hit = true;
             }
+
             if (hit) {
                 selectedElement = el;
                 isDragging = true;
                 offsetX = mx - el.x;
                 offsetY = my - el.y;
+                draw();
                 return;
             }
         }
+        draw();
     };
 
     window.onmousemove = (e) => {
-        if (isDragging && selectedElement) {
-            const rect = canvas.getBoundingClientRect();
-            selectedElement.x = e.clientX - rect.left - offsetX;
-            selectedElement.y = e.clientY - rect.top - offsetY;
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+
+        if (isResizing && selectedElement) {
+            const el = selectedElement;
+            if (el.type === 'text') {
+                el.fontSize = Math.max(10, mx - el.x) / (el.w / el.fontSize); 
+            } else if (el.type === 'rect') {
+                el.w = mx - el.x;
+                el.h = my - el.y;
+            } else if (el.type === 'circle') {
+                el.r = Math.sqrt((mx - el.x)**2 + (my - el.y)**2) / 1.414;
+            }
+            draw();
+        } else if (isDragging && selectedElement) {
+            selectedElement.x = mx - offsetX;
+            selectedElement.y = my - offsetY;
             draw();
         }
     };
 
-    window.onmouseup = () => { isDragging = false; selectedElement = null; };
+    window.onmouseup = () => { isDragging = false; isResizing = false; };
 
     canvas.oncontextmenu = (e) => {
         e.preventDefault();
@@ -236,12 +289,33 @@
             if (el.type === 'circle') hit = Math.sqrt((mx - el.x)**2 + (my - el.y)**2) < el.r;
             return !hit;
         });
+        selectedElement = null;
         draw();
     };
 
-    function clearCanvas() { elements = []; draw(); }
+    function cropToElements() {
+        if (elements.length === 0) return;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        elements.forEach(el => {
+            let x1, y1, x2, y2;
+            if (el.type === 'circle') { x1 = el.x - el.r; y1 = el.y - el.r; x2 = el.x + el.r; y2 = el.y + el.r; }
+            else { x1 = el.x; y1 = el.type === 'text' ? el.y - el.h : el.y; x2 = el.x + el.w; y2 = y1 + el.h; }
+            minX = Math.min(minX, x1); minY = Math.min(minY, y1);
+            maxX = Math.max(maxX, x2); maxY = Math.max(maxY, y2);
+        });
+        
+        const padding = 20;
+        elements.forEach(el => { el.x -= (minX - padding); el.y -= (minY - padding); });
+        document.getElementById('canvasW').value = Math.ceil(maxX - minX + padding * 2);
+        document.getElementById('canvasH').value = Math.ceil(maxY - minY + padding * 2);
+        resizeCanvas();
+    }
+
+    function clearCanvas() { elements = []; selectedElement = null; draw(); }
 
     function exportImage(format) {
+        selectedElement = null; // Hide handles
+        draw();
         const link = document.createElement('a');
         link.download = `placeforge-${Date.now()}.${format}`;
         link.href = canvas.toDataURL(`image/${format}`);
@@ -250,21 +324,15 @@
 
     function exportSVG() {
         let items = elements.map(el => {
-            if (el.type === 'text') {
-                return `<text x="${el.x}" y="${el.y}" font-family="'${el.fontFamily}'" font-size="${el.fontSize}" fill="${el.color}">${el.content}</text>`;
-            }
+            if (el.type === 'text') return `<text x="${el.x}" y="${el.y}" font-family="'${el.fontFamily}'" font-size="${el.fontSize}" fill="${el.color}">${el.content}</text>`;
             if (el.type === 'rect') return `<rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}" fill="${el.color}" />`;
             if (el.type === 'circle') return `<circle cx="${el.x}" cy="${el.y}" r="${el.r}" fill="${el.color}" />`;
         }).join('\n');
         
-        // Include font styles in SVG so it looks right when opened elsewhere
         const fontsUsed = [...new Set(elements.filter(e => e.type === 'text').map(e => e.fontFamily))];
         const fontImports = fontsUsed.map(f => `@import url('https://fonts.googleapis.com/css2?family=${f.replace(/ /g, '+')}&display=swap');`).join('\n');
 
-        const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
-            <style>${fontImports} text { white-space: pre; }</style>
-            ${items}
-        </svg>`;
+        const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}"><style>${fontImports}</style>${items}</svg>`;
         const blob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
         const link = document.createElement('a');
         link.download = 'placeforge-export.svg';
